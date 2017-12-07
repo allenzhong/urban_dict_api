@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
-gem 'rest-client'
 gem 'json'
+gem 'rest-client'
 
 group :development do
   gem 'byebug'
