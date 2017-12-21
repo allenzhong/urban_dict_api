@@ -4,11 +4,10 @@ RSpec.describe UrbanDictApi::ApiHelper do
    describe '#fetch_word' do
     context 'with exact result type' do
       before do
-        @valide_response = "{\"tags\": [\"value\"], \"result_type\": \"exact\", \"list\": [{\"definition\": \"def\", \"word\": \"value\"}]}"   
-        @url = "http://api.urbandictionary.com/v0/define?term=" 
-        @word = "value"
-        @stub = stub_request(:get, "#{@url}#{@word}")
-                  .to_return(body: @valide_response, status: 200)
+        @valide_response = "{\"tags\": [\"value\"], \"result_type\": \"exact\", \"list\": [{\"definition\": \"def\", \"word\": \"value\"}]}"  
+        @url = 'http://api.urbandictionary.com/v0/define?term=' 
+        @word = 'value'
+        @stub = stub_request(:get, "#{@url}#{@word}").to_return(body: @valide_response, status: 200)
       end
 
       it 'should have a correct request' do
@@ -28,10 +27,9 @@ RSpec.describe UrbanDictApi::ApiHelper do
     context 'with no_results type' do
       before do
         @valide_response = "{\"tags\": [], \"result_type\": \"no_results\", \"list\": []}"   
-        @url = "http://api.urbandictionary.com/v0/define?term=" 
-        @word = "no_result_word"
-        @stub = stub_request(:get, "#{@url}#{@word}")
-          .to_return(body: @valide_response, status: 200)
+        @url = 'http://api.urbandictionary.com/v0/define?term=' 
+        @word = 'no_result_word'
+        @stub = stub_request(:get, "#{@url}#{@word}").to_return(body: @valide_response, status: 200)
       end
 
       it 'should request and response correctly' do
@@ -45,15 +43,14 @@ RSpec.describe UrbanDictApi::ApiHelper do
 
   describe '#fetch_word with server errors' do
     before do
-      @url = "http://api.urbandictionary.com/v0/define?term=" 
-      @word = "value"
-      @stub = stub_request(:get, "#{@url}#{@word}").
-        to_return(status: [500, 'Internal Server Error'])
+      @url = 'http://api.urbandictionary.com/v0/define?term=' 
+      @word = 'value'
+      @stub = stub_request(:get, "#{@url}#{@word}").to_return(status: [500, 'Internal Server Error'])
     end
 
     it 'should raise an error' do
       expect {
-        response = UrbanDictApi::ApiHelper.fetch_word(@word)
+        UrbanDictApi::ApiHelper.fetch_word(@word)
       }.to raise_error { |error|
         expect(error).to be_a(RestClient::InternalServerError)
       }
@@ -62,14 +59,14 @@ RSpec.describe UrbanDictApi::ApiHelper do
 
   describe '#fetch_word with network timeout' do
     before do
-      @url = "http://api.urbandictionary.com/v0/define?term=" 
-      @word = "value"
+      @url = 'http://api.urbandictionary.com/v0/define?term=' 
+      @word = 'value'
       @stub = stub_request(:get, "#{@url}#{@word}").to_timeout
     end
 
     it 'should raise an error' do
       expect {
-        response = UrbanDictApi::ApiHelper.fetch_word(@word)
+        UrbanDictApi::ApiHelper.fetch_word(@word)
       }.to raise_error { |error|
         expect(error).to be_a(RestClient::RequestTimeout)
       }
